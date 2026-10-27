@@ -1,0 +1,11 @@
+{
+  "name": "局域网文件查看",
+  "short_name": "文件查看",
+  "description": "通过局域网在手机端访问电脑上的图片和视频文件",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f8fa",
+  "theme_color": "#f7f8fa",
+  "lang": "zh-CN",
+  "icons": []
+}

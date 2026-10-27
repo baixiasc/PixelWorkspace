@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>像素工作台</AssemblyName>
+    <RootNamespace>PixelWorkspaceLauncher</RootNamespace>
+    <Version>1.0.0</Version>
+    <Product>像素工作台</Product>
+    <Description>像素工作台启动器</Description>
+    <ApplicationIcon>launcher.ico</ApplicationIcon>
+    <PublishTrimmed>true</PublishTrimmed>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+</Project>

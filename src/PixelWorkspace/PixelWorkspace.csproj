@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>PixelWorkspace</AssemblyName>
+    <RootNamespace>PixelWorkspace</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Launcher\**" />
+    <None Remove="Launcher\**" />
+    <EmbeddedResource Remove="Launcher\**" />
+    <Page Remove="Launcher\**" />
+    <ApplicationDefinition Remove="Launcher\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="compatibility-fixtures.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="phone\public\**\*" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

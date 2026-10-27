@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f8fa">
+  <meta name="color-scheme" content="light">
+  <title>手机文件查看</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="manifest" href="/manifest.json">
+</head>
+<body>
+
+  <!-- 登录界面 -->
+  <main id="login-screen" class="screen login-screen hidden">
+    <section class="login-container" aria-labelledby="login-title">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2Z"></path>
+          <path d="M8.5 13.5h7"></path>
+          <path d="m13 11 2.5 2.5L13 16"></path>
+        </svg>
+      </div>
+
+      <div class="login-heading">
+        <p class="eyebrow">LAN FILES</p>
+        <h1 id="login-title">访问电脑文件</h1>
+        <p class="subtitle">密码显示在电脑启动窗口，授权后本机可直接访问</p>
+      </div>
+
+      <div class="login-form">
+        <label class="field-label" for="password-input">访问密码</label>
+        <div class="password-field">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="10" width="16" height="10" rx="3"></rect>
+            <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+          </svg>
+          <input type="password" id="password-input" placeholder="请输入密码" autocomplete="current-password" aria-describedby="login-error">
+        </div>
+
+        <div id="login-error" class="error-message hidden" role="alert"></div>
+
+        <button id="login-button" class="primary-btn" type="button">授权此设备</button>
+
+        <p class="device-note">成功授权后，下次打开无需再次输入密码</p>
+      </div>
+
+      <p class="privacy-note">
+        <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 2.5 16 5v4.2c0 3.8-2.5 6.7-6 8.3-3.5-1.6-6-4.5-6-8.3V5Z"></path>
+          <path d="m7.5 10 1.7 1.7 3.5-4"></path>
+        </svg>
+        文件仅在本地局域网传输
+      </p>
+    </section>
+  </main>
+
+  <!-- 主界面 -->
+  <main id="main-screen" class="screen app-screen hidden">
+    <header id="header" class="app-header">
+      <div class="header-inner">
+        <button id="back-btn" class="icon-btn" type="button" aria-label="返回上一级">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m15 18-6-6 6-6"></path>
+          </svg>
+        </button>
+
+        <div class="title-group">
+          <span class="title-caption">当前位置</span>
+          <h1 id="breadcrumb" class="breadcrumb">我的文件</h1>
+        </div>
+
+        <div class="header-actions">
+          <label class="sort-control" for="sort-select">
+            <span class="sr-only">排序方式</span>
+            <select id="sort-select" aria-label="排序方式">
+              <option value="default">默认排序</option>
+              <option value="name-asc">名称 A-Z</option>
+              <option value="name-desc">名称 Z-A</option>
+              <option value="modified-desc">最新修改</option>
+              <option value="modified-asc">最早修改</option>
+              <option value="size-desc">文件最大</option>
+              <option value="size-asc">文件最小</option>
+            </select>
+          </label>
+          <button id="refresh-btn" class="icon-btn" type="button" aria-label="刷新当前目录">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 11a8 8 0 1 0-2.3 5.7"></path>
+              <path d="M20 5v6h-6"></path>
+            </svg>
+          </button>
+          <button id="logout-btn" class="icon-btn" type="button" aria-label="退出登录">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4"></path>
+              <path d="m15 16 4-4-4-4"></path>
+              <path d="M19 12H9"></path>
+            </svg>
+          </button>
+          <button id="shutdown-btn" class="icon-btn danger-btn" type="button" aria-label="关闭服务器">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v9"></path>
+              <path d="M18.4 6.6a8 8 0 1 1-12.8 0"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <section class="content" aria-label="文件列表">
+      <div id="file-list" class="file-list" role="list"></div>
+
+      <div id="empty-state" class="empty-state hidden" role="status">
+        <div class="state-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2Z"></path>
+            <path d="M9 13h6"></path>
+          </svg>
+        </div>
+        <h2>这里还没有文件</h2>
+        <p>此文件夹为空</p>
+      </div>
+
+      <div id="loading" class="loading-overlay hidden" role="status" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>正在加载</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- 图片全屏查看 -->
+  <div id="image-viewer" class="viewer hidden" role="dialog" aria-modal="true" aria-label="图片预览">
+    <div id="image-counter" class="image-counter" aria-live="polite">0/0</div>
+    <img id="viewer-image" src="" alt="图片预览">
+    <button id="image-prev" class="image-nav image-nav-prev" type="button" aria-label="上一张图片">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m15 18-6-6 6-6"></path>
+      </svg>
+    </button>
+    <button id="image-next" class="image-nav image-nav-next" type="button" aria-label="下一张图片">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m9 18 6-6-6-6"></path>
+      </svg>
+    </button>
+    <button id="image-fullscreen-btn" class="viewer-fullscreen" type="button" aria-label="进入全屏" title="进入全屏">
+      <svg class="fullscreen-enter-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"></path>
+      </svg>
+      <svg class="fullscreen-exit-icon hidden" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 3v6H3M15 3v6h6M9 21v-6H3M15 21v-6h6"></path>
+      </svg>
+    </button>
+    <button class="viewer-close" type="button" onclick="closeViewer()" aria-label="关闭图片预览">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="m7 7 10 10M17 7 7 17"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- 视频播放器 -->
+  <div id="video-player" class="viewer hidden" role="dialog" aria-modal="true" aria-label="视频预览">
+    <video id="player-video" controls autoplay playsinline preload="auto"></video>
+    <button class="viewer-close video-exit" type="button" onclick="closeViewer()" aria-label="退出视频播放">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m15 18-6-6 6-6"></path>
+      </svg>
+      <span>退出视频</span>
+    </button>
+  </div>
+
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
