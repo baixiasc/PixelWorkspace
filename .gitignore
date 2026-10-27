@@ -1,0 +1,34 @@
+# 构建产物
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+dist/
+publish/
+发布版/
+整理版/
+单文件版/
+*.zip
+
+# Visual Studio / Rider / VS Code
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.sln
+*.DotSettings.user
+
+# 自检与调试输出
+self-test.txt
+smoke-test.txt
+default-image-folder.txt
+*.pdb
+*.tmp
+
+# 系统文件
+Thumbs.db
+desktop.ini
+.DS_Store
