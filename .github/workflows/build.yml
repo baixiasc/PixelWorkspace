@@ -1,0 +1,48 @@
+name: build
+
+on:
+  push:
+    branches: [main, master]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Build
+        run: dotnet build src/PixelWorkspace/PixelWorkspace.csproj -c Release --nologo
+
+      - name: Build launcher
+        run: dotnet build src/Launcher/Launcher.csproj -c Release --nologo
+
+      - name: Package and verify
+        shell: pwsh
+        run: ./scripts/build-release.ps1 -Verify
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: pixel-workspace-win-x64
+          path: |
+            dist/pixel-workspace-folder.zip
+            dist/pixel-workspace-single.zip
+          if-no-files-found: error
+
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/pixel-workspace-folder.zip
+            dist/pixel-workspace-single.zip
+          generate_release_notes: true
